@@ -1,6 +1,6 @@
 # RMUC2026 雷达仿真系统
 
-基于 ROS2 和 Ignition Gazebo 的 RoboMaster 2026 赛场雷达仿真系统，用于开发空中机器人定位和点云聚类算法。
+基于 ROS2 和 Ignition Gazebo 的 RoboMaster 2026 赛场雷达仿真系统，用于开发空中机器人定位。
 
 ##  项目介绍
 参考自 https://github.com/robomaster-oss/rmoss_gazebo/tree/humble?tab=readme-ov-file
@@ -97,7 +97,7 @@ radar-simulation/
 | `/radar/camera/camera_info` | `sensor_msgs/CameraInfo` | 30 Hz | 相机参数 |
 | `/tf_static` | `tf2_msgs/TFMessage` | - | 坐标变换 |
 
-## 🎮 常用命令
+##  常用命令
 
 ```bash
 # 查看所有话题
