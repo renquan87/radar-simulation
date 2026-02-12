@@ -1,0 +1,142 @@
+# Workspace-level .gitignore for ros2_simu_ws
+# Ignore build artifacts, temporary files, editor configs and large binary assets
+
+# --- ROS2 / colcon build artifacts ---
+/build/
+/install/
+/log/
+/colcon_ws/
+.colcon/
+.colcon_cache/
+
+# CMake / compiled files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+*.cmake
+*.o
+*.so
+*.a
+*.lo
+*.la
+*.dll
+*.exe
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/**
+.env
+venv/
+.env/
+.venv/
+
+# ROS / runtime
+*.bag
+*.bag.*
+ros2bag_*/
+*.db
+*.db-journal
+.ros/
+
+# Packages & node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE / Editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+*.suo
+*.user
+*.userprefs
+*.tmproj
+*.project
+*.classpath
+*.factorypath
+*.gradle
+.vs/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test / coverage
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+htmlcov/
+
+# Git internals
+*.patch
+*.orig
+
+# Large data, binary and model files (ignore by default; remove rule if you want to track specific files)
+# If you DO want a particular .stl/.pcd/.bag tracked, add a negation rule in repository root (e.g. '!resource/models/my_small_model.stl')
+*.stl
+*.obj
+*.ply
+*.las
+*.laz
+*.pcap
+*.bag
+*.bag.gz
+*.zip
+*.tar.gz
+*.tgz
+*.iso
+*.bin
+*.img
+*.raw
+*.npy
+*.npz
+*.h5
+*.pth
+*.ckpt
+*.pt
+
+# Note: *.pcd, *.stp, and *.dae are managed by Git LFS
+# See .gitattributes for LFS configuration
+
+# Unity generated / cache folders (keep Assets/ and ProjectSettings/ tracked; ignore generated data)
+rm_vision_simulator/Library/
+rm_vision_simulator/Temp/
+rm_vision_simulator/Obj/
+rm_vision_simulator/Build/
+rm_vision_simulator/Logs/
+rm_vision_simulator/Library/**
+rm_vision_simulator/obj/**
+rm_vision_simulator/Temp/**
+
+# Large project-specific directories to skip
+**/build/**
+**/install/**
+**/log/**
+
+# Ignore editor swap / backup files
+*~
+*.swp
+*.swn
+*.swo
+
+# Local hooks / secrets
+.git-credentials
+.env.local
+secrets.*
+
+# Allow tracking of small important model/source files by removing from ignore when needed
+# e.g. to keep a particular STL in repo, add a rule: '!src/path/to/my_model.stl'
