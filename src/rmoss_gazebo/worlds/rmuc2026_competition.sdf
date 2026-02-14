@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+    <world name="rmuc2026_competition">
+        <!-- Physics -->
+        <plugin
+            filename="libignition-gazebo-physics-system.so"
+            name="ignition::gazebo::systems::Physics"></plugin>
+        
+        <!-- Scene Broadcaster -->
+        <plugin
+            filename="libignition-gazebo-scene-broadcaster-system.so"
+            name="ignition::gazebo::systems::SceneBroadcaster"></plugin>
+        
+        <!-- User Commands -->
+        <plugin
+            filename="libignition-gazebo-user-commands-system.so"
+            name="ignition::gazebo::systems::UserCommands"></plugin>
+        
+        <!-- Sensors System -->
+        <plugin
+            filename="libignition-gazebo-sensors-system.so"
+            name="ignition::gazebo::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+        
+        <!-- IMU System -->
+        <plugin filename="libignition-gazebo-imu-system.so"
+                name="ignition::gazebo::systems::Imu"></plugin>
+        
+        <!-- Lighting -->
+        <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 20 0 0 0</pose>
+            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <specular>0.3 0.3 0.3 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.3</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+        
+        <!-- Ground Plane -->
+        <model name="ground_plane">
+            <static>true</static>
+            <link name="link">
+                <collision name="collision">
+                    <geometry>
+                        <plane>
+                            <normal>0 0 1</normal>
+                        </plane>
+                    </geometry>
+                </collision>
+                <visual name="visual">
+                    <geometry>
+                        <plane>
+                            <normal>0 0 1</normal>
+                            <size>100 100</size>
+                        </plane>
+                    </geometry>
+                    <material>
+                        <ambient>0.8 0.8 0.8 1</ambient>
+                        <diffuse>0.8 0.8 0.8 1</diffuse>
+                        <specular>0.8 0.8 0.8 1</specular>
+                    </material>
+                </visual>
+            </link>
+        </model>
+        
+        <!-- RMUC2026 Competition Field -->
+        <include>
+            <uri>model://rmuc2026_competition</uri>
+            <pose>0 0 0 0 0 0</pose>
+        </include>
+        
+        <!-- Blue Team Robot Starting Position 1 -->
+        <include>
+            <uri>model://rmua19_standard_robot</uri>
+            <pose>-4 3 0.15 0 0 1.57</pose>
+            <name>blue_robot_1</name>
+        </include>
+        
+        <!-- Blue Team Robot Starting Position 2 -->
+        <include>
+            <uri>model://rmua19_standard_robot</uri>
+            <pose>-4 -3 0.15 0 0 1.57</pose>
+            <name>blue_robot_2</name>
+        </include>
+        
+        <!-- Red Team Robot Starting Position 1 -->
+        <include>
+            <uri>model://rmua19_standard_robot</uri>
+            <pose>4 3 0.15 0 0 -1.57</pose>
+            <name>red_robot_1</name>
+        </include>
+        
+        <!-- Red Team Robot Starting Position 2 -->
+        <include>
+            <uri>model://rmua19_standard_robot</uri>
+            <pose>4 -3 0.15 0 0 -1.57</pose>
+            <name>red_robot_2</name>
+        </include>
+    </world>
+</sdf>

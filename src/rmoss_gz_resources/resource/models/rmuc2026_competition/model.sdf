@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <model name="rmuc2026_competition">
+    <static>true</static>
+    
+    <!-- 赛场地图 (STL文件单位为毫米，需缩放0.001转为米) -->
+    <!-- 原始STL范围: X[-14575,14575] Y[-6400,9649] Z[-1841,-111] mm -->
+    <!-- 缩放后: 约 29.15m x 16.05m -->
+    <!-- Z偏移1.441使赛场行走地面恰好在Z=0 (原始地面Z≈-1441mm) -->
+    <!-- Y偏移-1.625使赛场Y轴中心在0 -->
+    <link name="field_floor">
+      <pose>0 -1.625 1.441 0 0 0</pose>
+      
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://rmuc2026_competition/RMUC2026.stl</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://rmuc2026_competition/RMUC2026.stl</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+        
+        <material>
+          <ambient>0.5 0.5 0.55 1</ambient>
+          <diffuse>0.6 0.6 0.65 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
