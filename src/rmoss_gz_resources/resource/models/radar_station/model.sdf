@@ -25,94 +25,18 @@
       <pose>0 0 0 0 0 0</pose>
     </link>
 
-    <!-- 支撑柱 (4根) -->
-    <link name="pillar_fl">
-      <pose>1.6 0.5 1.25 0 0 0</pose>
-      <visual name="v"><geometry><box><size>0.1 0.1 2.5</size></box></geometry>
-        <material><ambient>0.4 0.4 0.4 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material></visual>
-      <collision name="c"><geometry><box><size>0.1 0.1 2.5</size></box></geometry></collision>
-    </link>
-    <joint name="j_pfl" type="fixed"><parent>base_link</parent><child>pillar_fl</child></joint>
+    <!-- 支撑柱和平台已移除，仅保留三脚架支撑传感器 -->
 
-    <link name="pillar_fr">
-      <pose>1.6 -0.5 1.25 0 0 0</pose>
-      <visual name="v"><geometry><box><size>0.1 0.1 2.5</size></box></geometry>
-        <material><ambient>0.4 0.4 0.4 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material></visual>
-      <collision name="c"><geometry><box><size>0.1 0.1 2.5</size></box></geometry></collision>
-    </link>
-    <joint name="j_pfr" type="fixed"><parent>base_link</parent><child>pillar_fr</child></joint>
-
-    <link name="pillar_bl">
-      <pose>-1.6 0.5 1.25 0 0 0</pose>
-      <visual name="v"><geometry><box><size>0.1 0.1 2.5</size></box></geometry>
-        <material><ambient>0.4 0.4 0.4 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material></visual>
-      <collision name="c"><geometry><box><size>0.1 0.1 2.5</size></box></geometry></collision>
-    </link>
-    <joint name="j_pbl" type="fixed"><parent>base_link</parent><child>pillar_bl</child></joint>
-
-    <link name="pillar_br">
-      <pose>-1.6 -0.5 1.25 0 0 0</pose>
-      <visual name="v"><geometry><box><size>0.1 0.1 2.5</size></box></geometry>
-        <material><ambient>0.4 0.4 0.4 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material></visual>
-      <collision name="c"><geometry><box><size>0.1 0.1 2.5</size></box></geometry></collision>
-    </link>
-    <joint name="j_pbr" type="fixed"><parent>base_link</parent><child>pillar_br</child></joint>
-
-    <!-- 平台面板 3.4m x 1.16m x 0.05m, 高度1.5m -->
-    <link name="platform">
-      <pose>0 0 1.525 0 0 0</pose>
-      <visual name="v">
-        <geometry><box><size>3.4 1.16 0.05</size></box></geometry>
-        <material><ambient>0.35 0.35 0.4 1</ambient><diffuse>0.45 0.45 0.5 1</diffuse></material>
-      </visual>
-      <collision name="c"><geometry><box><size>3.4 1.16 0.05</size></box></geometry></collision>
-    </link>
-    <joint name="j_platform" type="fixed"><parent>base_link</parent><child>platform</child></joint>
-
-    <!-- 围栏已按用户请求移除：不再在基座上生成挡视线的围栏 -->
-
-    <!-- ===== 三脚架 (移动到平台前边缘) ===== -->
-    <!-- 三脚架中心高约1.0m, 平台顶面在1.55m, 三脚架顶在2.5m -->
-    <!-- 移动到平台前边缘(X=1.6)，避免平台遮挡 -->
-    <link name="tripod_center">
-      <pose>1.6 0 2.0 0 0 0</pose>
-      <visual name="v">
-        <geometry><cylinder><radius>0.02</radius><length>1.0</length></cylinder></geometry>
-        <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material>
-      </visual>
-    </link>
-    <joint name="j_tripod" type="fixed"><parent>platform</parent><child>tripod_center</child></joint>
-
-    <link name="tripod_leg1">
-      <pose>1.85 0 2.1 0 0.35 0</pose>
-      <visual name="v"><geometry><cylinder><radius>0.01</radius><length>0.8</length></cylinder></geometry>
-        <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material></visual>
-    </link>
-    <joint name="j_tl1" type="fixed"><parent>tripod_center</parent><child>tripod_leg1</child></joint>
-
-    <link name="tripod_leg2">
-      <pose>1.45 0.2 2.1 -0.35 0 0</pose>
-      <visual name="v"><geometry><cylinder><radius>0.01</radius><length>0.8</length></cylinder></geometry>
-        <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material></visual>
-    </link>
-    <joint name="j_tl2" type="fixed"><parent>tripod_center</parent><child>tripod_leg2</child></joint>
-
-    <link name="tripod_leg3">
-      <pose>1.45 -0.2 2.1 0.35 0 0</pose>
-      <visual name="v"><geometry><cylinder><radius>0.01</radius><length>0.8</length></cylinder></geometry>
-        <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material></visual>
-    </link>
-    <joint name="j_tl3" type="fixed"><parent>tripod_center</parent><child>tripod_leg3</child></joint>
+    <!-- 三脚架/平台/支撑柱均已移除，传感器直接挂在base_link上 -->
 
     <!-- ============================================ -->
-    <!-- Livox HAP 激光雷达 (三脚架顶部)               -->
+    <!-- Livox HAP 激光雷达 (平台上)                    -->
     <!-- 高度: 2.5m (距离地面)                        -->
-    <!-- pitch=0rad(0°) 水平放置                      -->
-    <!-- yaw=-0.262rad(15°) 向右旋转                   -->
-    <!-- 位置移动到平台前边缘，避免遮挡                 -->
+    <!-- pitch=0.2618rad(15°) 向下倾斜覆盖赛场         -->
+    <!-- 垂直FOV ±45° → 覆盖从向上30°到向下60°        -->
     <!-- ============================================ -->
     <link name="livox_hap">
-      <pose>1.6 0 2.5 0 0 -0.150</pose>
+      <pose>0 0 2.5 0 0 0</pose>
       <visual name="lidar_body">
         <geometry><box><size>0.1 0.06 0.06</size></box></geometry>
         <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
@@ -128,17 +52,18 @@
         <lidar>
           <scan>
             <horizontal>
-              <samples>600</samples>
+              <!-- 水平FOV: ±125° (250°总) -->
+              <samples>2500</samples>
               <resolution>1</resolution>
-              <min_angle>-1.0472</min_angle>
-              <max_angle>1.0472</max_angle>
+              <min_angle>-2.182</min_angle>
+              <max_angle>2.182</max_angle>
             </horizontal>
             <vertical>
-              <!-- 增加垂直扫描角度从25°到45°，以获得更好的赛场覆盖 -->
-              <samples>64</samples>
+              <!-- 垂直FOV: ±45° (90°总)，覆盖近处到远处 -->
+              <samples>360</samples>
               <resolution>1</resolution>
-              <min_angle>-0.3927</min_angle>
-              <max_angle>0.3927</max_angle>
+              <min_angle>-0.7854</min_angle>
+              <max_angle>0.7854</max_angle>
             </vertical>
           </scan>
           <range>
@@ -154,17 +79,17 @@
         </lidar>
       </sensor>
     </link>
-    <joint name="j_lidar" type="fixed"><parent>tripod_center</parent><child>livox_hap</child></joint>
+    <joint name="j_lidar" type="fixed"><parent>base_link</parent><child>livox_hap</child></joint>
 
     <!-- ============================================ -->
-    <!-- 工业相机 (固定在激光雷达正上方, +0.08m)        -->
-    <!-- 与激光雷达同方向，水平放置                     -->
-    <!-- yaw=0.262rad(15°) 向右旋转                   -->
-    <!-- FOV加大到69°以覆盖赛场宽度                     -->
-    <!-- 跟随雷达移动到平台前边缘                       -->
+    <!-- 工业相机 (固定在激光雷达正上方)                 -->
+    <!-- CS060 + 6mm镜头, FOV≈61°                     -->
+    <!-- pitch=0.3491rad(20°) 向下倾斜                 -->
+    <!-- 垂直半角~20° → 覆盖从水平到向下40°            -->
+    <!-- 能看到近处约x=-13.5处的赛场区域                -->
     <!-- ============================================ -->
     <link name="camera_link">
-      <pose>1.6 0 2.58 0 0 -0.150</pose>
+      <pose>0 0 2.555 0 0 0</pose>
       <visual name="camera_body">
         <geometry><box><size>0.05 0.05 0.05</size></box></geometry>
         <material><ambient>0.05 0.05 0.12 1</ambient><diffuse>0.1 0.1 0.2 1</diffuse></material>
@@ -178,10 +103,11 @@
         <topic>radar/camera</topic>
         <visualize>true</visualize>
         <camera>
-          <horizontal_fov>1.2</horizontal_fov>
+          <!-- CS060 + 6mm镜头: FOV≈61° -->
+          <horizontal_fov>1.065</horizontal_fov>
           <image>
-            <width>1280</width>
-            <height>1024</height>
+            <width>3072</width>
+            <height>2048</height>
             <format>R8G8B8</format>
           </image>
           <clip>

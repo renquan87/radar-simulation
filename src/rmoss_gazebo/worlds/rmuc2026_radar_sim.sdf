@@ -1,18 +1,16 @@
 <?xml version="1.0" ?>
 <!--
-  RMUC2026 雷达仿真世界 - V2
+  RMUC2026 雷达仿真世界 - 由 generate_world.py 自动生成
   
   赛场尺寸: ~29m(X) × 16m(Y), 中心在原点
   赛场地面: Z=0
   
   雷达站: 按规则手册V1.3.0
-    - 位于蓝方宽边(X=-14.5)边缘中心(Y≈0)
-    - 基座底部在地面(Z=0), 平台高2.5m
+    - 位于蓝方宽边(X=-14.5)边缘中心(Y=0)
+    - 基座底部在地面(Z=0.5), 平台高2.5m
     - 传感器面向赛场(+X方向)
   
-  机器人: 6个(红蓝各3), 站在赛场地面(Z=0)上
-    - rmua19机器人模型内部pose已有z=0.15
-    - 所以 include pose z=0 即可让机器人站在地面上
+  机器人: 8个, 站在赛场地面(Z=0)上
 -->
 <sdf version="1.7">
     <world name="rmuc2026_radar_sim">
@@ -57,8 +55,7 @@
                 </ignition-gui>
                 <engine>ogre2</engine>
                 <scene>scene</scene>
-                <!-- 从蓝方侧后上方俯瞰赛场 -->
-                <camera_pose>-20 0 12 0 0.7 0</camera_pose>
+                <camera_pose>-20.0 0.0 12.0 0.0 0.7 0.0</camera_pose>
             </plugin>
             <plugin filename="WorldControl" name="World control">
                 <ignition-gui>
@@ -126,90 +123,74 @@
             <direction>0.5 -0.3 -0.7</direction>
         </light>
 
-        <!-- ==================== 地面 ==================== -->
-        <model name="ground_plane">
-            <static>true</static>
-            <link name="link">
-                <collision name="collision">
-                    <geometry><plane><normal>0 0 1</normal></plane></geometry>
-                </collision>
-                <visual name="visual">
-                    <geometry><plane><normal>0 0 1</normal><size>40 25</size></plane></geometry>
-                    <material>
-                        <ambient>0.55 0.55 0.55 1</ambient>
-                        <diffuse>0.6 0.6 0.6 1</diffuse>
-                    </material>
-                </visual>
-            </link>
-        </model>
-
         <!-- ==================== 赛场地图 ==================== -->
         <include>
             <uri>model://rmuc2026_competition</uri>
             <pose>0 0 0 0 0 0</pose>
         </include>
 
-        <!-- ==================== 蓝方机器人 (3个) ==================== -->
-        <!-- z=0: 机器人模型内部已有z=0.15偏移，轮子底部恰好在地面 -->
-        
-        <!-- 蓝方1号 - 蓝方半场前侧 -->
+        <!-- ==================== 机器人 ==================== -->
+
+        <!-- 蓝方 - 蓝方启动区 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>-10 3 0 0 0 0.5</pose>
+            <pose>-12.0 0.0 0.0 0 0 0.0</pose>
             <name>blue_robot_1</name>
         </include>
 
-        <!-- 蓝方2号 - 中路偏蓝方 -->
+        <!-- 蓝方 - 蓝方启动区侧 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>-3 -2 0 0 0 0.3</pose>
+            <pose>-10.0 1.5 0.0 0 0 0.3</pose>
             <name>blue_robot_2</name>
         </include>
 
-        <!-- 蓝方3号 - 蓝方半场侧路 -->
+        <!-- 蓝方 - 蓝方启动区另侧 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>-7 -5 0 0 0 1.0</pose>
+            <pose>-11.0 -2.5 0.0 0 0 -0.3</pose>
             <name>blue_robot_3</name>
         </include>
 
-        <!-- ==================== 红方机器人 (3个) ==================== -->
-        <!-- 红方1号 - 红方半场前侧 -->
+        <!-- 红方 - 红方启动区 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>10 -3 0 0 0 -2.6</pose>
+            <pose>12.0 0.0 0.0 0 0 3.14</pose>
             <name>red_robot_1</name>
         </include>
 
-        <!-- 红方2号 - 中路偏红方 -->
+        <!-- 红方 - 红方启动区侧 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>3 2 0 0 0 -2.8</pose>
+            <pose>10.0 -1.5 0.0 0 0 -2.8</pose>
             <name>red_robot_2</name>
         </include>
 
-        <!-- 红方3号 - 红方半场侧路 -->
+        <!-- 红方 - 红方启动区另侧 (平地) -->
         <include>
             <uri>model://rmua19_standard_robot</uri>
-            <pose>7 5 0 0 0 -2.0</pose>
+            <pose>11.0 2.5 0.0 0 0 2.8</pose>
             <name>red_robot_3</name>
         </include>
 
+        <!-- 蓝方 - 蓝方空中机器人 (悬停 z=5m) -->
+        <include>
+            <uri>model://aerial_robot</uri>
+            <pose>-5.0 0.0 1.6 0 0 0.0</pose>
+            <name>aerial_robot_blue</name>
+        </include>
+
+        <!-- 红方 - 红方空中机器人 (悬停 z=5m) -->
+        <include>
+            <uri>model://aerial_robot</uri>
+            <pose>5.0 0.0 2.2 0 0 3.14</pose>
+            <name>aerial_robot_red</name>
+        </include>
+
         <!-- ==================== 雷达站 ==================== -->
-        <!--
-          按规则手册 V1.3.0:
-          - 赛场宽边(Y轴方向)边缘中心
-          - 蓝方侧: X ≈ -14.5 (赛场边缘)
-          - Y ≈ 0 (与战场中心轴线对齐)
-          - Z = 0 (基座底部在地面)
-          - yaw = 0 (面向+X, 即面向赛场)
-          
-          注意: 基座宽1.16m, 所以需要在赛场边缘外一点
-          赛场X范围约[-14.575, 14.575], 基座放在X=-15处边缘
-        -->
         <include>
             <uri>model://radar_station</uri>
-            <pose>-14.5 0 0 0 0 0</pose>
+            <pose>-14.5 0 0.5 0.0 0.0 0.0</pose>
             <name>radar_station_blue</name>
         </include>
 

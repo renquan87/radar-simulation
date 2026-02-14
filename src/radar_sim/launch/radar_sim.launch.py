@@ -55,8 +55,20 @@ def generate_launch_description():
         radar_sim_dir, "worlds", "rmuc2026_radar_sim.sdf"
     )
 
+    # ======================== 清理残留 Gazebo 进程 ========================
+    # 杀掉可能残留的 ign/gz 进程，避免黑屏和 Start 按钮卡死
+    cleanup_gz = ExecuteProcess(
+        cmd=["bash", "-c",
+             "killall -9 ign gazebo ruby gz 2>/dev/null; sleep 1; echo '[cleanup] Done'"],
+        output="screen",
+    )
+
     # ======================== Gazebo Ignition ========================
-    gazebo = IncludeLaunchDescription(
+    # Run server and GUI as separate processes to work around an
+    # ign-gazebo-6 (Fortress) bug where the GUI's SceneManager crashes
+    # with "Another item already exists" when both run in the same process.
+    # Server starts immediately after cleanup; GUI connects after a short delay.
+    gazebo_server = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("ros_gz_sim"),
@@ -64,7 +76,18 @@ def generate_launch_description():
                 "gz_sim.launch.py",
             )
         ),
-        launch_arguments={"gz_args": world_file}.items(),
+        launch_arguments={"gz_args": "-s " + world_file}.items(),
+    )
+
+    gazebo_gui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("ros_gz_sim"),
+                "launch",
+                "gz_sim.launch.py",
+            )
+        ),
+        launch_arguments={"gz_args": "-g"}.items(),
     )
 
     # ======================== ros_gz_bridge ========================
@@ -77,9 +100,9 @@ def generate_launch_description():
         arguments=[
             # 激光雷达点云
             "/livox/lidar/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked",
-            # 相机图像
-            "/radar/camera/image@sensor_msgs/msg/Image[ignition.msgs.Image",
-            # 相机内参
+            # 相机图像 (Ignition topic: /radar/camera)
+            "/radar/camera@sensor_msgs/msg/Image[ignition.msgs.Image",
+            # 相机内参 (Ignition topic: /radar/camera/camera_info)
             "/radar/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
         ],
         output="screen",
@@ -201,10 +224,9 @@ def generate_launch_description():
     )
 
     # ======================== 延迟启动桥接和TF ========================
-    # Gazebo需要更多时间来初始化传感器和坐标系, 延迟8秒再启动桥接
-    # 修复static_transform_publisher崩溃问题
+    # Server 从 2s 启动, GUI 从 6s, 桥接从 12s (给传感器足够初始化时间)
     delayed_bridge_and_tf = TimerAction(
-        period=8.0,
+        period=12.0,
         actions=[
             bridge,
             radar_station_tf,
@@ -217,15 +239,29 @@ def generate_launch_description():
 
     # RViz最后启动, 确保TF树完全建立
     delayed_rviz = TimerAction(
-        period=12.0,
+        period=16.0,
         actions=[rviz2],
+    )
+
+    # Server 在清理后延迟启动
+    delayed_server = TimerAction(
+        period=2.0,
+        actions=[gazebo_server],
+    )
+
+    # GUI 在 server 之后启动
+    delayed_gui_after_server = TimerAction(
+        period=6.0,
+        actions=[gazebo_gui],
     )
 
     return LaunchDescription(
         [
             declare_use_rviz,
             declare_world_name,
-            gazebo,
+            cleanup_gz,
+            delayed_server,
+            delayed_gui_after_server,
             delayed_bridge_and_tf,
             delayed_rviz,
         ]

@@ -25,69 +25,86 @@ RADAR_STATION = {
     "model_uri": "model://radar_station",
     "name": "radar_station_blue",
     # 世界坐标系中的位置
-    "x": -14.5,       # 赛场X边缘 (赛场范围约 ±14.575m)
-    "y": 0.0,          # 与战场中心轴线对齐
-    "z": 0.0,          # 基座底部在地面
+    "x": -14.5,       # 赛场X边缘外侧 (再靠后一点)
+    "y": 0,           # 赛场边缘中轴
+    "z": 0.5,          # 模型内传感器已在z=2.5m处, 基座z=0即离地2.5m
     "roll": 0.0,
     "pitch": 0.0,
     "yaw": 0.0,        # 面向+X (面向赛场)
     # 传感器在模型内的相对位置 (用于TF发布)
-    "lidar_local_x": 0.5,
+    "lidar_local_x": 0.0,
     "lidar_local_y": 0.0,
-    "lidar_local_z": 3.70,
-    "lidar_pitch": 0.35,    # ~20° 向下
-    "camera_local_x": 0.5,
+    "lidar_local_z": 0,
+    "lidar_pitch": 0,    # 15° 向下倾斜，覆盖近处到远处赛场 0.2618 rad (15°) 适合覆盖近处和远处区域
+    "camera_local_x": 0.0,
     "camera_local_y": 0.0,
-    "camera_local_z": 3.78,
-    "camera_pitch": 0.35,   # 与LiDAR同角度
+    "camera_local_z": 0,
+    "camera_pitch": 0,   # 20° 向下倾斜，能看到近处赛场区域 0.3491 rad (20°) 适合覆盖近处区域，能看到赛场边缘和部分内部
 }
 
 # ==================== 机器人参数 ====================
 # z=0: 机器人模型内部已有z=0.15偏移, 轮子底部恰好在地面
+# 注意: 位置需避开赛场高地和墙壁, 放在确认的平地区域
+# 赛场范围约 X:[-14.5, 14.5] Y:[-8, 8], 高地主要在中部区域
 ROBOTS = [
-    # ---- 蓝方 ----
+    # ---- 蓝方地面机器人 ----
     {
         "name": "blue_robot_1",
         "model_uri": "model://rmua19_standard_robot",
-        "x": -10.0, "y": 3.0, "z": 0.0,
-        "roll": 0, "pitch": 0, "yaw": 0.5,
-        "team": "blue", "comment": "蓝方半场前侧",
+        "x": -12.0, "y": 0.0, "z": 0.0,
+        "roll": 0, "pitch": 0, "yaw": 0.0,
+        "team": "blue", "comment": "蓝方启动区 (平地)",
     },
     {
         "name": "blue_robot_2",
         "model_uri": "model://rmua19_standard_robot",
-        "x": -3.0, "y": -2.0, "z": 0.0,
+        "x": -10.0, "y": 1.5, "z": 0.0,
         "roll": 0, "pitch": 0, "yaw": 0.3,
-        "team": "blue", "comment": "中路偏蓝方",
+        "team": "blue", "comment": "蓝方启动区侧 (平地)",
     },
     {
         "name": "blue_robot_3",
         "model_uri": "model://rmua19_standard_robot",
-        "x": -7.0, "y": -5.0, "z": 0.0,
-        "roll": 0, "pitch": 0, "yaw": 1.0,
-        "team": "blue", "comment": "蓝方半场侧路",
+        "x": -11.0, "y": -2.5, "z": 0.0,
+        "roll": 0, "pitch": 0, "yaw": -0.3,
+        "team": "blue", "comment": "蓝方启动区另侧 (平地)",
     },
-    # ---- 红方 ----
+    # ---- 红方地面机器人 ----
     {
         "name": "red_robot_1",
         "model_uri": "model://rmua19_standard_robot",
-        "x": 10.0, "y": -3.0, "z": 0.0,
-        "roll": 0, "pitch": 0, "yaw": -2.6,
-        "team": "red", "comment": "红方半场前侧",
+        "x": 12.0, "y": 0.0, "z": 0.0,
+        "roll": 0, "pitch": 0, "yaw": 3.14,
+        "team": "red", "comment": "红方启动区 (平地)",
     },
     {
         "name": "red_robot_2",
         "model_uri": "model://rmua19_standard_robot",
-        "x": 3.0, "y": 2.0, "z": 0.0,
+        "x": 10.0, "y": -1.5, "z": 0.0,
         "roll": 0, "pitch": 0, "yaw": -2.8,
-        "team": "red", "comment": "中路偏红方",
+        "team": "red", "comment": "红方启动区侧 (平地)",
     },
     {
         "name": "red_robot_3",
         "model_uri": "model://rmua19_standard_robot",
-        "x": 7.0, "y": 5.0, "z": 0.0,
-        "roll": 0, "pitch": 0, "yaw": -2.0,
-        "team": "red", "comment": "红方半场侧路",
+        "x": 11.0, "y": 2.5, "z": 0.0,
+        "roll": 0, "pitch": 0, "yaw": 2.8,
+        "team": "red", "comment": "红方启动区另侧 (平地)",
+    },
+    # ---- 空中机器人 (静态, 悬停在赛场上方) ----
+    {
+        "name": "aerial_robot_blue",
+        "model_uri": "model://aerial_robot",
+        "x": -5.0, "y": 0.0, "z": 1.6,
+        "roll": 0, "pitch": 0, "yaw": 0.0,
+        "team": "blue", "comment": "蓝方空中机器人 (悬停 z=5m)",
+    },
+    {
+        "name": "aerial_robot_red",
+        "model_uri": "model://aerial_robot",
+        "x": 5.0, "y": 0.0, "z": 2.2,
+        "roll": 0, "pitch": 0, "yaw": 3.14,
+        "team": "red", "comment": "红方空中机器人 (悬停 z=5m)",
     },
 ]
 

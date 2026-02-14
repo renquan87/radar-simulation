@@ -1,0 +1,312 @@
+<?xml version="1.0" ?>
+<!--
+  RMUC2026 空中机器人 - 四旋翼无人机模型
+  尺寸参考: 机身约 0.45m x 0.45m x 0.15m, 轴距约 0.55m
+  静态模型，用于雷达仿真中的视觉目标
+-->
+<sdf version="1.7">
+  <model name="aerial_robot">
+    <static>true</static>
+
+    <!-- 主机身 -->
+    <link name="body">
+      <inertial>
+        <mass>3.5</mass>
+        <inertia>
+          <ixx>0.05</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>0.05</iyy><iyz>0</iyz>
+          <izz>0.08</izz>
+        </inertia>
+      </inertial>
+
+      <!-- 中心机身 - 扁平六面体 -->
+      <visual name="body_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box><size>0.25 0.25 0.08</size></box>
+        </geometry>
+        <material>
+          <ambient>0.15 0.15 0.15 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+      <collision name="body_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box><size>0.25 0.25 0.08</size></box>
+        </geometry>
+      </collision>
+
+      <!-- 上盖板 (电池/电控区域) -->
+      <visual name="top_plate_visual">
+        <pose>0 0 0.055 0 0 0</pose>
+        <geometry>
+          <box><size>0.18 0.18 0.03</size></box>
+        </geometry>
+        <material>
+          <ambient>0.08 0.08 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.15 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <!-- 底部载荷/相机 -->
+      <visual name="camera_visual">
+        <pose>0.05 0 -0.055 0 0 0</pose>
+        <geometry>
+          <box><size>0.06 0.05 0.04</size></box>
+        </geometry>
+        <material>
+          <ambient>0.05 0.05 0.05 1</ambient>
+          <diffuse>0.08 0.08 0.08 1</diffuse>
+          <specular>0.4 0.4 0.4 1</specular>
+        </material>
+      </visual>
+
+      <!-- ===== 旋翼臂 (4个对角方向) ===== -->
+      <!-- 前右臂 -->
+      <visual name="arm_fr_visual">
+        <pose>0.14 -0.14 0.01 0 0 -0.785</pose>
+        <geometry>
+          <box><size>0.28 0.03 0.025</size></box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <!-- 前左臂 -->
+      <visual name="arm_fl_visual">
+        <pose>0.14 0.14 0.01 0 0 0.785</pose>
+        <geometry>
+          <box><size>0.28 0.03 0.025</size></box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <!-- 后右臂 -->
+      <visual name="arm_rr_visual">
+        <pose>-0.14 -0.14 0.01 0 0 0.785</pose>
+        <geometry>
+          <box><size>0.28 0.03 0.025</size></box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <!-- 后左臂 -->
+      <visual name="arm_rl_visual">
+        <pose>-0.14 0.14 0.01 0 0 -0.785</pose>
+        <geometry>
+          <box><size>0.28 0.03 0.025</size></box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+      </visual>
+
+      <!-- ===== 电机座 (4个) ===== -->
+      <visual name="motor_fr_visual">
+        <pose>0.22 -0.22 0.03 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.02</radius><length>0.035</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.3 1</ambient>
+          <diffuse>0.35 0.35 0.35 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="motor_fl_visual">
+        <pose>0.22 0.22 0.03 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.02</radius><length>0.035</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.3 1</ambient>
+          <diffuse>0.35 0.35 0.35 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="motor_rr_visual">
+        <pose>-0.22 -0.22 0.03 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.02</radius><length>0.035</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.3 1</ambient>
+          <diffuse>0.35 0.35 0.35 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="motor_rl_visual">
+        <pose>-0.22 0.22 0.03 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.02</radius><length>0.035</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.3 1</ambient>
+          <diffuse>0.35 0.35 0.35 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- ===== 螺旋桨 (4个扁平圆盘表示) ===== -->
+      <visual name="prop_fr_visual">
+        <pose>0.22 -0.22 0.055 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.12</radius><length>0.005</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.6</ambient>
+          <diffuse>0.15 0.15 0.15 0.6</diffuse>
+        </material>
+      </visual>
+
+      <visual name="prop_fl_visual">
+        <pose>0.22 0.22 0.055 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.12</radius><length>0.005</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.6</ambient>
+          <diffuse>0.15 0.15 0.15 0.6</diffuse>
+        </material>
+      </visual>
+
+      <visual name="prop_rr_visual">
+        <pose>-0.22 -0.22 0.055 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.12</radius><length>0.005</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.6</ambient>
+          <diffuse>0.15 0.15 0.15 0.6</diffuse>
+        </material>
+      </visual>
+
+      <visual name="prop_rl_visual">
+        <pose>-0.22 0.22 0.055 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.12</radius><length>0.005</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.6</ambient>
+          <diffuse>0.15 0.15 0.15 0.6</diffuse>
+        </material>
+      </visual>
+
+      <!-- ===== 起落架 (4根细柱) ===== -->
+      <visual name="leg_fr_visual">
+        <pose>0.1 -0.1 -0.07 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.008</radius><length>0.1</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leg_fl_visual">
+        <pose>0.1 0.1 -0.07 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.008</radius><length>0.1</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leg_rr_visual">
+        <pose>-0.1 -0.1 -0.07 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.008</radius><length>0.1</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leg_rl_visual">
+        <pose>-0.1 0.1 -0.07 0 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.008</radius><length>0.1</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- 起落架横杆 (前后各一根) -->
+      <visual name="skid_front_visual">
+        <pose>0.1 0 -0.12 0 0 0</pose>
+        <geometry>
+          <box><size>0.01 0.22 0.01</size></box>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="skid_rear_visual">
+        <pose>-0.1 0 -0.12 0 0 0</pose>
+        <geometry>
+          <box><size>0.01 0.22 0.01</size></box>
+        </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.3 0.3 0.3 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- ===== LED指示灯 (前方红色，后方绿色，便于辨别朝向) ===== -->
+      <visual name="led_front_visual">
+        <pose>0.13 0 0.02 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.01</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>1.0 0.1 0.1 1</ambient>
+          <diffuse>1.0 0.2 0.2 1</diffuse>
+          <emissive>0.8 0.1 0.1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="led_rear_visual">
+        <pose>-0.13 0 0.02 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.01</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>0.1 1.0 0.1 1</ambient>
+          <diffuse>0.2 1.0 0.2 1</diffuse>
+          <emissive>0.1 0.8 0.1 1</emissive>
+        </material>
+      </visual>
+
+      <!-- 整体碰撞盒 -->
+      <collision name="full_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box><size>0.55 0.55 0.18</size></box>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

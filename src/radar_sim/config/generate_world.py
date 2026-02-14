@@ -170,23 +170,6 @@ def generate_world_sdf():
             <direction>0.5 -0.3 -0.7</direction>
         </light>
 
-        <!-- ==================== 地面 ==================== -->
-        <model name="ground_plane">
-            <static>true</static>
-            <link name="link">
-                <collision name="collision">
-                    <geometry><plane><normal>0 0 1</normal></plane></geometry>
-                </collision>
-                <visual name="visual">
-                    <geometry><plane><normal>0 0 1</normal><size>40 25</size></plane></geometry>
-                    <material>
-                        <ambient>0.55 0.55 0.55 1</ambient>
-                        <diffuse>0.6 0.6 0.6 1</diffuse>
-                    </material>
-                </visual>
-            </link>
-        </model>
-
         <!-- ==================== 赛场地图 ==================== -->
         <include>
             <uri>{FIELD['model_uri']}</uri>
@@ -206,6 +189,49 @@ def generate_world_sdf():
 </sdf>
 """
     return sdf
+
+
+def update_model_sensor_pitch():
+    """根据 sim_config.py 中的 lidar_pitch/camera_pitch 更新 model.sdf 中传感器的 pose"""
+    import re
+
+    rs = RADAR_STATION
+    lidar_pitch = rs["lidar_pitch"]
+    camera_pitch = rs["camera_pitch"]
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    src_dir = os.path.dirname(os.path.dirname(script_dir))
+    model_sdf_path = os.path.join(
+        src_dir, "rmoss_gz_resources", "resource", "models",
+        "radar_station", "model.sdf"
+    )
+
+    if not os.path.exists(model_sdf_path):
+        print(f"⚠️  model.sdf 不存在: {model_sdf_path}")
+        return
+
+    with open(model_sdf_path, "r") as f:
+        content = f.read()
+
+    # 更新 livox_hap link 的 pose: <pose>X Y Z ROLL PITCH YAW</pose>
+    # 匹配 livox_hap link 中的 pose，只替换 pitch 分量
+    content = re.sub(
+        r'(<link name="livox_hap">\s*<pose>\S+ \S+ \S+ )\S+ \S+ (\S+)(</pose>)',
+        rf'\g<1>0 {lidar_pitch} \2\3',
+        content,
+    )
+
+    # 更新 camera_link 的 pose
+    content = re.sub(
+        r'(<link name="camera_link">\s*<pose>\S+ \S+ \S+ )\S+ \S+ (\S+)(</pose>)',
+        rf'\g<1>0 {camera_pitch} \2\3',
+        content,
+    )
+
+    with open(model_sdf_path, "w") as f:
+        f.write(content)
+
+    print(f"✅ 已更新 model.sdf 传感器俯仰角: LiDAR={lidar_pitch} rad, Camera={camera_pitch} rad")
 
 
 def main():
@@ -229,6 +255,9 @@ def main():
     if args.config:
         print_config()
         return
+
+    # 先更新 model.sdf 中的传感器 pitch
+    update_model_sensor_pitch()
 
     sdf_content = generate_world_sdf()
 
